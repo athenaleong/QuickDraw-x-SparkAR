@@ -7,29 +7,30 @@ def create_image(image, filename):
 
     x = -1
     y = -1
-    weight =  5
+    weight =  10
+    color = (185, 14, 4)
 
     for stroke in image:
         for i in range(len(stroke[0])):
             if x != -1: 
                 for point in get_line(stroke[0][i], stroke[1][i], x, y):
-                    pixels[point[0],point[1]] = (0, 0, 0)
+                    pixels[point[0],point[1]] = color
                     
                     for w1 in range(weight):
                         for w2 in range(weight):
-                            pixels[min(point[0] + w1, 255),point[1]] = (0, 0, 0)
-                            pixels[point[0],min(point[1] + w1, 255)] = (0, 0, 0)
-                            pixels[min(point[0] + w1, 255),min(point[1] + w2, 255)] = (0, 0, 0)
-                            pixels[max(point[0] - w1, 0), point[1]] = (0, 0, 0)
-                            pixels[point[0] ,max(point[1] - w1, 0)] = (0, 0, 0)
-                            pixels[max(point[0] - w1, 0), max(point[1] - w2, 0)] = (0, 0, 0)
-                            pixels[min(point[0] + w1, 255), max(point[1] - w2, 0)] = (0, 0, 0)
-                            pixels[max(point[0] - w1, 0), min(point[1] + w2, 255)] = (0, 0, 0)
+                            pixels[min(point[0] + w1, 255),point[1]] = color
+                            pixels[point[0],min(point[1] + w1, 255)] = color
+                            pixels[min(point[0] + w1, 255),min(point[1] + w2, 255)] = color
+                            pixels[max(point[0] - w1, 0), point[1]] = color
+                            pixels[point[0] ,max(point[1] - w1, 0)] = color
+                            pixels[max(point[0] - w1, 0), max(point[1] - w2, 0)] = color
+                            pixels[min(point[0] + w1, 255), max(point[1] - w2, 0)] = color
+                            pixels[max(point[0] - w1, 0), min(point[1] + w2, 255)] = color
                     
                     
                     
                     
-            pixels[stroke[0][i],stroke[1][i]] = (0, 0, 0)
+            pixels[stroke[0][i],stroke[1][i]] = color
             x = stroke[0][i]
             y = stroke[1][i]
         x = -1
@@ -73,9 +74,12 @@ def get_line(x1, y1, x2, y2):
     
 
 
-with open('raw_ndjson/full_simplified_smiley face.ndjson', 'r') as f:
+with open('raw_ndjson/full_simplified_mouth.ndjson', 'r') as f:
     smiley_dict = ndjson.load(f)
 count = 0
 for smiles in smiley_dict:
-    create_image(smiles['drawing'], "out_ndjson/" + str(count)+ ".png")
+    if count > 50:
+        break
+    create_image(smiles['drawing'], "mouth/mouth_" + str(count)+ ".png")
     count += 1
+    
